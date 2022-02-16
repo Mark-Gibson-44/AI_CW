@@ -37,7 +37,9 @@ if __name__ == "__main__":
         config = {
             'DATASET': 'chess.data',
             'LEARNING_RATE': 0.1,
-            'DATASPLIT': 0.33
+            'DATASPLIT': 0.33,
+            'PROBLEM': "Classification",
+            'DATA_SPLIT': 0.1
         }
     
     stub = True
