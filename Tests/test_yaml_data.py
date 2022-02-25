@@ -12,7 +12,7 @@ def test_yaml_content():
     assert len(yaml_data) != 0
 
 def test_data_split():
-    #print(type(yaml_data['DATA_SPLIT']))
+    
     data_split_param = yaml_data['DATA_SPLIT']
 
     if type(data_split_param) == float:
@@ -21,9 +21,10 @@ def test_data_split():
     else:
         assert True
 
-def test_learning_rate():
-    lr = yaml_data['LEARNING_RATE']
+def test_smote_settings():
+    lr = yaml_data['SMOTE']
 
-    assert lr < 1 and lr > 0
+    # Will fail before this line if Smote not within YAML
+    assert True and type(lr) == bool
 
 

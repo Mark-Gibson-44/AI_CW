@@ -18,14 +18,32 @@ import math
 parser = argparse.ArgumentParser(description='Configure Training code')
 parser.add_argument('--with-yaml', dest='yaml', action='store_true')
 
+# Number of trees in random forest
+n_estimators = [int(x) for x in np.linspace(start = 200, stop = 2000, num = 10)]
+# Number of features to consider at every split
+max_features = ['auto', 'sqrt']
+# Maximum number of levels in tree
+max_depth = [int(x) for x in np.linspace(10, 110, num = 11)]
+max_depth.append(None)
+# Minimum number of samples required to split a node
+min_samples_split = [2, 5, 10]
+# Minimum number of samples required at each leaf node
+min_samples_leaf = [1, 2, 4]
+# Method of selecting samples for training each tree
+bootstrap = [True, False]# Create the random grid
+random_grid = {'n_estimators': n_estimators,
+               'max_features': max_features,
+               'max_depth': max_depth,
+               'min_samples_split': min_samples_split,
+               'min_samples_leaf': min_samples_leaf,
+               'bootstrap': bootstrap}
+
 def unbalance_dataset(x_train, y_train):
 
     sm = SMOTE()
     x_res, y_res = sm.fit_resample(x_train, y_train)
 
     return x_res, y_res
-
-
 
 
 
@@ -89,10 +107,12 @@ if __name__ == "__main__":
     model2 = model(x_train, x_test, y_train, y_test, RandomForestClassifier(), "Random_Forrest")
 
     models = [model1, model2]
-
+    
+    search_params = [None, random_grid]
+    i = 0
     for model in models:
-        model.train_and_fit()
-
+        model.train_and_fit(search_params[i])
+        i += 1
         model.print_metrics()
 
         model.plot_confusion_matrix()

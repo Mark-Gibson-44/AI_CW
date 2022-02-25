@@ -3,6 +3,8 @@ from sklearn.ensemble import RandomForestClassifier
 
 from sklearn.metrics import balanced_accuracy_score, accuracy_score, average_precision_score
 
+from sklearn.model_selection import RandomizedSearchCV
+
 from sklearn.metrics import PrecisionRecallDisplay
 import matplotlib.pyplot as plt
 
@@ -20,6 +22,18 @@ class model:
         self.model_name = model_name
     
     def train_and_fit(self, grid=None):
+        
+        
+        if grid is not None:
+            #print(grid)
+            rf_random = RandomizedSearchCV(estimator = self.model, param_distributions = grid,
+               n_iter = 100, cv = 5, verbose=2, random_state=35, n_jobs = -1)
+
+            rf_random.fit(self.x_train, self.y_train)
+
+            self.predictions = self.model.predict(self.x_test)
+
+            return
 
         self.model.fit(self.x_train, self.y_train)
         

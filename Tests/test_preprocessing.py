@@ -1,6 +1,6 @@
 import pytest
 
-from ..preprocess import *
+from ..src.preprocess import *
 
 
 data = read_data('chess.data')

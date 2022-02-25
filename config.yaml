@@ -4,3 +4,4 @@ DATA_SPLIT: 0.1
 SMOTE: True
 PCA: False
 PROBLEM: Classification
+#Random_SEARCH: {}
