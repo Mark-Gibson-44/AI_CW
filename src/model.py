@@ -19,7 +19,7 @@ class model:
         self.model = model
         self.model_name = model_name
     
-    def train_and_fit(self):
+    def train_and_fit(self, grid=None):
 
         self.model.fit(self.x_train, self.y_train)
         

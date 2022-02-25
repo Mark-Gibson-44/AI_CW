@@ -18,6 +18,13 @@ import math
 parser = argparse.ArgumentParser(description='Configure Training code')
 parser.add_argument('--with-yaml', dest='yaml', action='store_true')
 
+def unbalance_dataset(x_train, y_train):
+
+    sm = SMOTE()
+    x_res, y_res = sm.fit_resample(x_train, y_train)
+
+    return x_res, y_res
+
 
 
 
@@ -59,6 +66,9 @@ if __name__ == "__main__":
         'g': 7,
         'h': 8
     }
+
+
+
     
     categorical_features = ['king_x', 'rook_x', 'king2_x']
     for feature in categorical_features:
@@ -71,6 +81,9 @@ if __name__ == "__main__":
     
     x_train, x_test, y_train, y_test = train_test_split(features, targets, test_size=config['DATA_SPLIT'], random_state=42)
 
+    if config['SMOTE'] == True:
+        
+        x_train, y_train = unbalance_dataset(x_train, y_train)
 
     model1 = model(x_train, x_test, y_train, y_test, DecisionTreeClassifier(), "Decision_Tree")
     model2 = model(x_train, x_test, y_train, y_test, RandomForestClassifier(), "Random_Forrest")
