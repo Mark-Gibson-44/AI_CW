@@ -23,9 +23,9 @@ class model:
     
     def train_and_fit(self, grid=None):
         
-        
+        #Only apply RandomSearch if pass as relevant argument
         if grid is not None:
-            #print(grid)
+            
             rf_random = RandomizedSearchCV(estimator = self.model, param_distributions = grid,
                n_iter = 100, cv = 5, verbose=2, random_state=35, n_jobs = -1)
 
@@ -48,7 +48,7 @@ class model:
 
         print("Accuracy: {}".format(accuracy_score(self.predictions, self.y_test)))
         print("Balanced accuracy: {}".format(balanced_accuracy_score(self.predictions, self.y_test)))
-        #print("Precision: {}".format(average_precision_score(self.predictions, self.y_test)))
+
         
     def plot_precision_recall(self, f_name=None):
 

@@ -11,12 +11,15 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.linear_model import SGDClassifier
 from sklearn.decomposition import PCA
+from sklearn.model_selection import cross_val_score
 import numpy as np
 import math
 
 
 parser = argparse.ArgumentParser(description='Configure Training code')
 parser.add_argument('--with-yaml', dest='yaml', action='store_true')
+
+
 
 # Number of trees in random forest
 n_estimators = [int(x) for x in np.linspace(start = 200, stop = 2000, num = 10)]
@@ -38,6 +41,11 @@ random_grid = {'n_estimators': n_estimators,
                'min_samples_leaf': min_samples_leaf,
                'bootstrap': bootstrap}
 
+
+#Apply Smote to training set data
+#PARAM x_train: training data features
+#PARAM y_train: training data targets
+#Returns x and y train after having applied smote
 def unbalance_dataset(x_train, y_train):
 
     sm = SMOTE()
@@ -45,7 +53,18 @@ def unbalance_dataset(x_train, y_train):
 
     return x_res, y_res
 
+def apply_cross_validation(X, Y, K_Folds, Model):
 
+    k_scores = cross_val_score(Model, X, Y, cv=K_Folds)
+
+    print("Cross Validation Accuracy of {0}".format(k_scores.mean()))
+
+
+def format_print(text):
+
+    print("################")
+    print("## {}".format(text))
+    print("################")
 
 if __name__ == "__main__":
 
@@ -61,13 +80,14 @@ if __name__ == "__main__":
         #Initialise defaults if yaml not used
         config = {
             'DATASET': 'chess.data',
-            'LEARNING_RATE': 0.1,
+            'LEARNING_RATE': 0.25,
             'DATASPLIT': 0.33,
             'PROBLEM': "Classification",
-            'DATA_SPLIT': 0.1
+            'DATA_SPLIT': 0.1,
+            'SMOTE': True
         }
     
-    stub = True
+    
 
     data = read_data(config['DATASET'])
     
@@ -96,11 +116,26 @@ if __name__ == "__main__":
     features = data.iloc[:, :-1]
     features = normalize_tabular_data(features)
     targets = label_to_number(data, 'sucess')
-    
+
+    # Define Classifiers being used
+
+    classifiers = [DecisionTreeClassifier(), RandomForestClassifier()]
+
+    ##########################
+    #   Cross Validation Code
+    ##########################
+    #format_print("Cross Validation")
+    #for classifier in classifiers:
+    #    apply_cross_validation(features, targets, 5, classifier)
+
+    ##########################
+    #   Train Test Split approach
+    ##########################
+    format_print("Train Test Split")
     x_train, x_test, y_train, y_test = train_test_split(features, targets, test_size=config['DATA_SPLIT'], random_state=42)
 
     if config['SMOTE'] == True:
-        
+        format_print("Applying Smote")
         x_train, y_train = unbalance_dataset(x_train, y_train)
 
     model1 = model(x_train, x_test, y_train, y_test, DecisionTreeClassifier(), "Decision_Tree")
@@ -108,7 +143,7 @@ if __name__ == "__main__":
 
     models = [model1, model2]
     
-    search_params = [None, random_grid]
+    search_params = [None, None]
     i = 0
     for model in models:
         model.train_and_fit(search_params[i])

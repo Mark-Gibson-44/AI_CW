@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import tensorflow as tf
+#import tensorflow as tf
 
 
 def read_data(f_name):
@@ -22,8 +22,7 @@ def normalize_tabular_data(_data):
     avoid = ["Study", "SID", "total CNR", "Gender", "Research Group", "Age"]
     # apply normalization techniques
     for column in _data.columns:
-        if column not in avoid:
-            _data[column] = _data[column] / _data[column].abs().max()
+        _data[column] = _data[column] / _data[column].abs().max()
     return _data
 
 
@@ -83,29 +82,6 @@ def normalise_x_y_coordinates(df, x_col_name, y_col_name):
 
     return encoded_elements
 
-    
-def df_to_dataset(dataframe, shuffle=True, batch_size=32):
-  df = dataframe.copy()
-  labels = df.pop('target')
-  df = {key: value[:,tf.newaxis] for key, value in dataframe.items()}
-  ds = tf.data.Dataset.from_tensor_slices((dict(df), labels))
-  if shuffle:
-    ds = ds.shuffle(buffer_size=len(dataframe))
-  ds = ds.batch(batch_size)
-  ds = ds.prefetch(batch_size)
-  return ds
-
-def get_normalization_layer(name, dataset):
-  # Create a Normalization layer for the feature.
-  normalizer = layers.Normalization(axis=None)
-
-  # Prepare a Dataset that only yields the feature.
-  feature_ds = dataset.map(lambda x, y: x[name])
-
-  # Learn the statistics of the data.
-  normalizer.adapt(feature_ds)
-
-  return normalizer
 
 def distance(df, r1, r2):
     dist = []
@@ -115,8 +91,6 @@ def distance(df, r1, r2):
 
     return dist
 
-def categorical_to_numerical(df, categorical_feature_col):
-    pass
 
 
 def label_to_number(data, column):
