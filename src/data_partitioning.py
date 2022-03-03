@@ -1,10 +1,5 @@
 from imblearn.over_sampling import SMOTE 
 
-
-def apply_pca():
-    pass
-
-
 def unbalance_dataset(x_train, y_train):
 
     sm = SMOTE()

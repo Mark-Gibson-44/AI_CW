@@ -26,10 +26,10 @@ class model:
         #Only apply RandomSearch if pass as relevant argument
         if grid is not None:
             
-            rf_random = RandomizedSearchCV(estimator = self.model, param_distributions = grid,
+            self.model = RandomizedSearchCV(estimator = self.model, param_distributions = grid,
                n_iter = 100, cv = 5, verbose=2, random_state=35, n_jobs = -1)
 
-            rf_random.fit(self.x_train, self.y_train)
+            self.model.fit(self.x_train, self.y_train)
 
             self.predictions = self.model.predict(self.x_test)
 

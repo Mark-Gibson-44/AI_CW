@@ -11,7 +11,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.linear_model import SGDClassifier
 from sklearn.decomposition import PCA
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, KFold
 import numpy as np
 import math
 
@@ -55,9 +55,23 @@ def unbalance_dataset(x_train, y_train):
 
 def apply_cross_validation(X, Y, K_Folds, Model):
 
-    k_scores = cross_val_score(Model, X, Y, cv=K_Folds)
+    
+    fold_results = []
+    x = []
+    for k in range(2, K_Folds+1):
+        x.append(k)
+        folds = KFold(n_splits=K_Folds, random_state=42, shuffle=True)
+        k_scores = cross_val_score(Model, X, Y, cv=folds)
+        fold_results.append(k_scores)
+        print("Cross Validation Accuracy of {0}".format(k_scores.mean()))
+    
+    
+    plot = plt.boxplot(fold_results, 'red', positions=x)
+    for item in ['boxes', 'whiskers', 'fliers', 'medians', 'caps']:
+        plt.setp(plot[item], color='purple')
 
-    print("Cross Validation Accuracy of {0}".format(k_scores.mean()))
+    #plt.setp(plot["boxes"], facecolor='purple')
+    plt.show()
 
 
 def format_print(text):
@@ -124,9 +138,10 @@ if __name__ == "__main__":
     ##########################
     #   Cross Validation Code
     ##########################
-    #format_print("Cross Validation")
-    #for classifier in classifiers:
-    #    apply_cross_validation(features, targets, 5, classifier)
+    
+    format_print("Cross Validation")
+    for classifier in classifiers:
+        apply_cross_validation(features, targets, 5, classifier)
 
     ##########################
     #   Train Test Split approach
@@ -142,7 +157,13 @@ if __name__ == "__main__":
     model2 = model(x_train, x_test, y_train, y_test, RandomForestClassifier(), "Random_Forrest")
 
     models = [model1, model2]
-    
+    d_tree_params =  {
+        'max_depth': [ 5, 10, 20, 30, 50, 100],
+        "max_features": [5],
+        'min_samples_leaf': [5, 10, 20, 50, 100, 200],
+        'criterion': ["gini", "entropy"]
+    }
+
     search_params = [None, None]
     i = 0
     for model in models:

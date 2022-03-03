@@ -27,6 +27,8 @@ def most_common_position_labels(df, col1, col2, label_col, piece_name):
     for label in df[label_col].unique():
         print('Most common position of piece {0} for {1} is {2} {3}'.format(piece_name, label, df.loc[df[label_col] == label][col1].mode()[0], df.loc[df[label_col] ==label][col2].mode()[0]))
 
+
+
 if __name__ == "__main__":
 
     data = pd.read_csv('chess.data')
