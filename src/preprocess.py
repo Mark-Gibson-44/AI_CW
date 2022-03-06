@@ -1,54 +1,19 @@
 import pandas as pd
 import numpy as np
-#import tensorflow as tf
 
+'''
+Function to read in data
+args:
+f_name: CSV file name for dataset
 
+returns: Pandas Dataframe generated from file
+'''
 def read_data(f_name):
     
 
     return pd.read_csv(f_name)
 
 
- 
-def normalize_tabular_data(_data):
-    """Normalizes the values of each column (Excluding columns unrelated to the  scan itself)
- 
-    Args:
-        _data (pd.DataFrame):  Data
- 
-    Returns:
-        pd.DataFrame: Normalized  data
-    """
-    avoid = ["Study", "SID", "total CNR", "Gender", "Research Group", "Age"]
-    # apply normalization techniques
-    for column in _data.columns:
-        _data[column] = _data[column] / _data[column].abs().max()
-    return _data
-
-
-
-def OHE(df, col_name):
-    values = df[col_name]
-    unique = pd.unique(values)
-
-    #unique = pd.unique(df[col_name])
-    #print(unique)
-    mapped = {}
-    i = 0
-    for iter in unique:
-
-        mapped[iter] = i
-        i = i + 1
-    print(i)
-    OHE_list = []
-
-    for i in range(len(df)):
-        
-        #OHE_list.append(mapped[df[col_name][i]])
-        OHE_list.append(mapped[df[col_name].iloc[i]])
-    return OHE_list
-
-        
 
 '''
 Converts coordinates in the form (x, y) into a singular value
@@ -60,7 +25,11 @@ def calculate_1d_position(x, y, width=8):
 
     return ((y-1) * 8) + (x - 1)
 
+'''
+Convert categorical piece positions into numeric equivalents
+'''
 def normalise_x_y_coordinates(df, x_col_name, y_col_name):
+    #Dictionary of conversions
     x_pos = {
         'a': 1,
         'b': 2,
@@ -83,6 +52,9 @@ def normalise_x_y_coordinates(df, x_col_name, y_col_name):
     return encoded_elements
 
 
+'''
+calculate distance between two pieces within the data
+'''
 def distance(df, r1, r2):
     dist = []
 
@@ -92,9 +64,12 @@ def distance(df, r1, r2):
     return dist
 
 
-
+'''
+Generate a numeric column from a categorical column
+'''
 def label_to_number(data, column):
     count = 0
+    #Iterate through unique elements and replace all instances of that element 
     for label in data[column].unique():
         data[column] = data[column].replace(label, count)
         count += 1

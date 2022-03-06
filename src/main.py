@@ -53,10 +53,19 @@ def unbalance_dataset(x_train, y_train):
 
     return x_res, y_res
 
+'''
+Generate results from applying cross-validation from 2-K folds
+args:
+X: data features
+Y: data targets
+K_Folds: max number of folds
+Model: Classifier used 
+'''
 def apply_cross_validation(X, Y, K_Folds, Model):
 
     
     fold_results = []
+    #Create List of K values to specify x position of box plots
     x = []
     for k in range(2, K_Folds+1):
         x.append(k)
@@ -73,7 +82,9 @@ def apply_cross_validation(X, Y, K_Folds, Model):
     #plt.setp(plot["boxes"], facecolor='purple')
     plt.show()
 
-
+'''
+Utility function to format printing certain params
+'''
 def format_print(text):
 
     print("################")
@@ -166,11 +177,14 @@ if __name__ == "__main__":
 
     search_params = [None, None]
     i = 0
+    #Iterate through specified classifiers
     for model in models:
+        #Train Model with optional random search param list
         model.train_and_fit(search_params[i])
         i += 1
+        #Display results
         model.print_metrics()
-
+        #Plot Confusion matrix
         model.plot_confusion_matrix()
 
     
