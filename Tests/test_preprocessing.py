@@ -23,6 +23,3 @@ def test_1d_coords():
         assert data['black_king_1d'][i] > -1
 
 
-def test_remove_missing_values():
-    pass
-

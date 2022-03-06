@@ -75,9 +75,9 @@ def apply_cross_validation(X, Y, K_Folds, Model):
         print("Cross Validation Accuracy of {0}".format(k_scores.mean()))
     
     
-    plot = plt.boxplot(fold_results, 'red', positions=x)
-    for item in ['boxes', 'whiskers', 'fliers', 'medians', 'caps']:
-        plt.setp(plot[item], color='purple')
+    plot = plt.boxplot(fold_results,   positions=x)
+    #for item in ['boxes', 'whiskers', 'fliers', 'medians', 'caps']:
+    #    plt.setp(plot[item], color='purple')
 
     #plt.setp(plot["boxes"], facecolor='purple')
     plt.show()

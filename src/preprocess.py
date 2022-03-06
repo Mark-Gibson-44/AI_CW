@@ -13,7 +13,20 @@ def read_data(f_name):
 
     return pd.read_csv(f_name)
 
-
+"""
+Normalises column data
+args:
+_data (pd.DataFrame):  Data
+ 
+Returns:
+padas DataFrame: Normalized  data
+"""
+def normalize_tabular_data(_data):
+    
+    # apply normalization technique
+    for column in _data.columns:
+        _data[column] = _data[column] / _data[column].abs().max()
+    return _data
 
 '''
 Converts coordinates in the form (x, y) into a singular value
