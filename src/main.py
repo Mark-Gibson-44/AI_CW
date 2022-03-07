@@ -21,25 +21,34 @@ parser.add_argument('--with-yaml', dest='yaml', action='store_true')
 
 
 
-# Number of trees in random forest
-n_estimators = [int(x) for x in np.linspace(start = 200, stop = 2000, num = 10)]
-# Number of features to consider at every split
-max_features = ['auto', 'sqrt']
-# Maximum number of levels in tree
-max_depth = [int(x) for x in np.linspace(10, 110, num = 11)]
-max_depth.append(None)
-# Minimum number of samples required to split a node
-min_samples_split = [2, 5, 10]
-# Minimum number of samples required at each leaf node
-min_samples_leaf = [1, 2, 4]
-# Method of selecting samples for training each tree
-bootstrap = [True, False]# Create the random grid
-random_grid = {'n_estimators': n_estimators,
-               'max_features': max_features,
-               'max_depth': max_depth,
-               'min_samples_split': min_samples_split,
-               'min_samples_leaf': min_samples_leaf,
-               'bootstrap': bootstrap}
+'''
+Function to encapsulate search params for random forrest
+'''
+def gen_random_forrest_search_params():
+    # Number of trees in random forest
+    n_estimators = [int(x) for x in np.linspace(start = 100, stop = 400, num = 10)]
+    # Number of features to consider at every split
+    max_features = ['auto']
+    # Maximum number of levels in tree
+    max_depth = [int(x) for x in np.linspace(10, 70, num = 11)]
+    min_samples_split = [2, 5, 10]
+    min_samples_leaf = [1, 4, 8]
+    bootstrap = [True, False]# Create the random grid
+    random_grid = {'n_estimators': n_estimators,
+                'max_features': max_features,
+                'max_depth': max_depth,
+                'min_samples_split': min_samples_split,
+                'min_samples_leaf': min_samples_leaf,
+                'bootstrap': bootstrap}
+    return random_grid
+
+'''
+Function to encapsulate search params for decision tree
+'''
+def gen_decision_tree_search_params():
+    search_params = {'max_leaf_nodes': list(range(2, 100)), 'min_samples_split': [2,3,4]}
+
+    return search_params
 
 
 #Apply Smote to training set data
