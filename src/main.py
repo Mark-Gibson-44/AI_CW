@@ -177,13 +177,8 @@ if __name__ == "__main__":
     model2 = model(x_train, x_test, y_train, y_test, RandomForestClassifier(), "Random_Forrest")
 
     models = [model1, model2]
-    d_tree_params =  {
-        'max_depth': [ 5, 10, 20, 30, 50, 100],
-        "max_features": [5],
-        'min_samples_leaf': [5, 10, 20, 50, 100, 200],
-        'criterion': ["gini", "entropy"]
-    }
-
+    
+    # Add search param function calls to enable random search
     search_params = [None, None]
     i = 0
     #Iterate through specified classifiers
